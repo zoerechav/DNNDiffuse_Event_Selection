@@ -1,0 +1,26 @@
+#Stage shebang script and GridFTP certificate to the node.
+# # The executable itself will always be staged if the node is
+# # on a different filesystem.
+should_transfer_files = YES
+transfer_input_files = /data/user/zrechav/DNNCascades_Diffuse/bdt_selfveto/bdt_scripts/build_PF/npx_v2/v2/PF_MODULE.sh
+# # but do not try to copy outputs back (see: https://htcondor-wiki.cs.wisc.edu/index.cgi/tktview?tn=3081)
++TransferOutput=""
+
+executable = /data/user/zrechav/DNNCascades_Diffuse/bdt_selfveto/bdt_scripts/build_PF/npx_v2/v2/PF_MODULE.sh
+
+output = /scratch/zrechav/PF_MODULE/PF_MODULE_$(filenum).out
+error = /scratch/zrechav/PF_MODULE/PF_MODULE_$(filenum).err
+log = /scratch/zrechav/PF_MODULE/PF_MODULE_$(filenum).log
+
+universe = vanilla
+notification = never
+
+#+AccountingGroup = "1_week.$ENV(USER)"
+#+AccountingGroup="uwa.$ENV(USER)"
+#Requirements = (OpSysMajorVer == 7 || OSGVO_OS_VERSION == 7)
+#+SingularityImage="/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-el7:latest"
+request_memory = 4000
+
+arguments = $(infile) $(outfile)  
+
+queue
