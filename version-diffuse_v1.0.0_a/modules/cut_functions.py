@@ -75,7 +75,7 @@ def qtot_cut(frame, thresholdc=CONTAINED_QTOT_MIN,thresholdp=PARTIAL_QTOT_MIN):
 def theo_cut(frame, threshold=THEO_SCORE_MIN):
     flag = False
     if "PreferredFit" in frame:
-        val = frame['EventClasssifierOutput']['Through_Going_Track']
-        if val > threshold:
+        val = frame['EventClassifierOutput']['Through_Going_Track']
+        if val < threshold:
             flag = True
     return flag

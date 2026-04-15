@@ -13,8 +13,9 @@ parser.add_argument(
 args = parser.parse_args()
 
 #datasets = ['23521','23522','23523','23524','23525','23526','23527','23528','23529']
-datasets = ['22612','22613','22614','22633','22634','22635','22644','22645','22646',
-           '23521','23522','23523','23524','23525','23526','23527','23528','23529']
+datasets = ['22612','22613','22614',#'22633','22634','22635','22644','22645','22646',
+           #'23521','23522','23523','23524','23525','23526','23527','23528','23529'
+           ]
 #subdirs = ['0000000-0000999','0001000-0001999']
 def make_subdirs(start=0, stop=25000, step=1000):
     subdirs = []
@@ -29,7 +30,7 @@ def get_Grid_job(infile, dataset, filenum, outfile, gcd, nugen, muongun, corsika
     if nugen == 1:
         job_name = 'DNNDiffuse_' + dataset + '_' + filenum
         lines = [
-            'JOB ' + job_name + ' /data/user/zrechav/DNNCascades_Diffuse/final_level_module/DNNDiffuse_module_nugen.sub',
+            'JOB ' + job_name + ' /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_a/DNNDiffuse_module_nugen.sub',
             'VARS ' + job_name + ' infile="' + infile + '" outfile="' + outfile + '" filenum="' + str(filenum) + '"',
             'Retry ' + job_name + ' 2',
         ]
@@ -95,7 +96,7 @@ if nugen == 1:
 
             input_path = os.path.join(
                 "/data/ana/Diffuse/DNNCascades_Diffuse/version-1.0",
-                "DNNCascadeL4_monopod/NuGen",
+                "DNNCascadeL4_classifier/NuGen",
                 dataset,
                 subdir,
             )
@@ -114,7 +115,7 @@ if nugen == 1:
 
             output_dir = os.path.join(
                 "/data/ana/Diffuse/DNNCascades_Diffuse/version-1.0",
-                "DNNCascadeL5/version-diffuse_v1_0_0/NuGen",
+                "DNNCascadeL5/version-diffuse_v1_0_0_a/NuGen",
                 dataset,
                 subdir,
             )

@@ -87,6 +87,7 @@ tray.Add(
         "SnowstormParameterDict",
         "I3MCWeightDict",
         "I3EventHeader",
+        "EventClassiferOutput",
         'nuveto'
     ],
 )

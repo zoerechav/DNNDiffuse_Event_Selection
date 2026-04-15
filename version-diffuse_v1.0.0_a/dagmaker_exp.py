@@ -20,7 +20,7 @@ def get_Grid_job(infile, dataset, filenum, outfile, gcd, nugen, muongun, corsika
     if nugen == 1:
         job_name = 'DNNDiffuse_' + dataset + '_' + filenum
         lines = [
-            'JOB ' + job_name + ' /data/user/zrechav/DNNCascades_Diffuse/final_level_module/DNNDiffuse_module_exp.sub',
+            'JOB ' + job_name + ' /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_a/DNNDiffuse_module_exp.sub',
             'VARS ' + job_name + ' infile="' + infile + '" outfile="' + outfile + '" filenum="' + str(filenum) + '"',
             'Retry ' + job_name + ' 2',
         ]

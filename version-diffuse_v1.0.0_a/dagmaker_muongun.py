@@ -16,7 +16,7 @@ def get_Grid_job(infile,dataset,filenum,outfile,gcd, nugen,muongun,corsika,burn)
     if nugen==1:
         job_name = 'DNNDiffuse_' + dataset + '_' + filenum
         lines =[
-            'JOB ' + job_name + ' /data/user/zrechav/DNNCascades_Diffuse/final_level_module/DNNDiffuse_module_muongun.sub',
+            'JOB ' + job_name + ' /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_a/DNNDiffuse_module_muongun.sub',
             'VARS ' + job_name + ' infile="' + infile + '" outfile="' + outfile +'" filenum="'+str(filenum)+'"',
             'Retry ' + job_name + ' 2',
             ]
@@ -72,7 +72,7 @@ if nugen == 1:
 
         input_path = os.path.join(
             "/data/ana/Diffuse/DNNCascades_Diffuse/version-1.0",
-            "DNNCascadeL4_monopod/MuonGun",
+            "DNNCascadeL4_classifier/MuonGun",
             dataset,
         )
 

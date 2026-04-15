@@ -1,0 +1,26 @@
+#Stage shebang script and GridFTP certificate to the node.
+# # The executable itself will always be staged if the node is
+# # on a different filesystem.
+should_transfer_files = YES
+transfer_input_files = /data/user/zrechav/DNNDiffuse_Event_Selection/L4_classifier/run_classifier.sh
+# # but do not try to copy outputs back (see: https://htcondor-wiki.cs.wisc.edu/index.cgi/tktview?tn=3081)
++TransferOutput=""
+
+executable = /data/user/zrechav/DNNDiffuse_Event_Selection/L4_classifier/run_classifier.sh
+
+output = /scratch/zrechav/DNNDiffuse_classifier/_$(filenum).out
+error = /scratch/zrechav/DNNDiffuse_classifier/_$(filenum).err
+log = /scratch/zrechav/DNNDiffuse_classifier/_$(filenum).log
+
+universe = vanilla
+notification = never
+
+
+request_memory = 1000
+
+periodic_release = (HoldReasonCode =?= 21 && HoldReasonSubCode =?= 1001) || HoldReasonCode =?= 21
+periodic_remove = (JobStatus =?= 5 && (HoldReasonCode =!= 34 && HoldReasonCode =!= 21)) || (RequestMemory > 13192)
+
+arguments = $(infile) $(outfile)  
+
+queue

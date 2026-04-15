@@ -97,7 +97,8 @@ def DNNDiffuseFinalLevel_v1_0_0_nugen(frame):
         
         reco_vars["homogenized_qtot"] = frame['Homogenized_QTot'].value
         
-        reco_vars["throughgoing_score"] = frame['EventClasssifierOutput']['Through_Going_Track']
+        through_score = frame['EventClassifierOutput']['Through_Going_Track']
+        reco_vars["throughgoing_score"] = through_score
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -130,9 +131,9 @@ def DNNDiffuseFinalLevel_v1_0_0_nugen(frame):
         if USE_QTOT_CUTS:
             if not qtot_cut(frame):
                 passes = False
-
+        
         if USE_THEO_CUTS:
-            if not thoe_cut(frame):
+            if through_score > THEO_SCORE_MIN:
                 passes = False
             
 
@@ -294,7 +295,8 @@ def DNNDiffuseFinalLevel_v1_0_0_corsika(frame):
         
         reco_vars["homogenized_qtot"] = frame['Homogenized_QTot'].value
         
-        reco_vars["throughgoing_score"] = frame['EventClasssifierOutput']['Through_Going_Track']
+        through_score = frame['EventClassifierOutput']['Through_Going_Track']
+        reco_vars["throughgoing_score"] = through_score
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -329,7 +331,7 @@ def DNNDiffuseFinalLevel_v1_0_0_corsika(frame):
                 passes = False
 
         if USE_THEO_CUTS:
-            if not thoe_cut(frame):
+            if through_score > THEO_SCORE_MIN:
                 passes = False
 
         #sigma uncertainty features
@@ -462,7 +464,8 @@ def DNNDiffuseFinalLevel_v1_0_0_muongun(frame):
         
         reco_vars["homogenized_qtot"] = frame['Homogenized_QTot'].value
         
-        reco_vars["throughgoing_score"] = frame['EventClasssifierOutput']['Through_Going_Track']
+        through_score = frame['EventClassifierOutput']['Through_Going_Track']
+        reco_vars["throughgoing_score"] = through_score
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -497,7 +500,7 @@ def DNNDiffuseFinalLevel_v1_0_0_muongun(frame):
                 passes = False
 
         if USE_THEO_CUTS:
-            if not thoe_cut(frame):
+            if through_score > THEO_SCORE_MIN:
                 passes = False
 
         cc = frame["cc"]
@@ -629,7 +632,8 @@ def DNNDiffuseFinalLevel_v1_0_0_exp(frame):
         
         reco_vars["homogenized_qtot"] = frame['Homogenized_QTot'].value
         
-        reco_vars["throughgoing_score"] = frame['EventClasssifierOutput']['Through_Going_Track']
+        through_score = frame['EventClassifierOutput']['Through_Going_Track']
+        reco_vars["throughgoing_score"] = through_score
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -664,7 +668,7 @@ def DNNDiffuseFinalLevel_v1_0_0_exp(frame):
                 passes = False
 
         if USE_THEO_CUTS:
-            if not thoe_cut(frame):
+            if through_score > THEO_SCORE_MIN:
                 passes = False
 
         

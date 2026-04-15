@@ -2,11 +2,11 @@
 # # The executable itself will always be staged if the node is
 # # on a different filesystem.
 should_transfer_files = YES
-transfer_input_files = /data/user/zrechav/DNNCascades_Diffuse/bdt_selfveto/bdt_scripts/build_PF/npx_v2/v2/PF_MODULE.sh
+transfer_input_files = /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_b/PF_MODULE.sh
 # # but do not try to copy outputs back (see: https://htcondor-wiki.cs.wisc.edu/index.cgi/tktview?tn=3081)
 +TransferOutput=""
 
-executable = /data/user/zrechav/DNNCascades_Diffuse/bdt_selfveto/bdt_scripts/build_PF/npx_v2/v2/PF_MODULE.sh
+executable = /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_b/PF_MODULE.sh
 
 output = /scratch/zrechav/PF_MODULE/PF_MODULE_$(filenum).out
 error = /scratch/zrechav/PF_MODULE/PF_MODULE_$(filenum).err

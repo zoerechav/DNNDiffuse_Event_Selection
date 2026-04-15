@@ -1,7 +1,7 @@
 #!/bin/sh /cvmfs/icecube.opensciencegrid.org/py3-v4.4.2/RHEL_9_x86_64_v2/metaprojects/icetray/v1.17.0/bin/icetray-shell
 
 """
-Run Theo's DNN classifier on all i3 files in a directory
+Run Theo's DNN classifier on a single i3 file.
 Only create a new output file if one does not already exist.
 """
 
@@ -15,21 +15,20 @@ from pathlib import Path
 import os
 import argparse
 import time
-import glob
 
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    "-i", "--input_dir",
+    "--infile",
     required=True,
-    help="Input directory containing i3 files"
+    help="Input i3 file"
 )
 
 parser.add_argument(
-    "-o", "--output_dir",
+    "--outfile",
     required=True,
-    help="Output directory"
+    help="Output i3 file"
 )
 
 parser.add_argument(
@@ -46,67 +45,55 @@ print("Started:", start_time)
 onnx_model_path = "/cvmfs/icecube.opensciencegrid.org/users/briedel/ml/models/tglauch_classifier/3/model.onnx"
 ml_config_path = Path(os.environ["I3_BUILD"]) / "ml_suite/resources/theo_dnn_classification_model.yaml"
 
-input_dir = Path(args.input_dir)
-output_dir = Path(args.output_dir)
+infile = Path(args.infile)
+outfile = Path(args.outfile)
 
-output_dir.mkdir(parents=True, exist_ok=True)
+# make parent output directory if needed
+outfile.parent.mkdir(parents=True, exist_ok=True)
 
-# grab all i3 files
-files = sorted(input_dir.glob("*.i3.zst"))
-# files = files[:400]
+if outfile.exists():
+    print(f"Skipping: output already exists: {outfile}")
+    print("Finished:", time.asctime())
+    raise SystemExit(0)
 
-print(f"Found {len(files)} files")
+print(f"Processing: {infile}")
+print(f"Output:     {outfile}")
 
+tray = I3Tray()
 
-def process_file(infile):
-    outfile = output_dir / infile.name
+infiles = [args.gcd, str(infile)]
 
-    if outfile.exists():
-        #print(f"\nSkipping:   {infile}")
-        #print(f"Exists:     {outfile}")
-        return
+tray.Add("I3Reader", "reader", FilenameList=infiles)
 
-    print(f"\nProcessing: {infile}")
-    #print(f"Output:     {outfile}")
+tray.AddSegment(
+    event_classifier_onnx_ml,
+    "EventClassifier",
+    ONNX_model_path=str(onnx_model_path),
+    mlsuite_config=ml_config_path,
+    output_key="EventClassifierOutput",
+)
 
-    tray = I3Tray()
+tray.Add(
+    "I3Writer",
+    "writer",
+    filename=str(outfile)+'.i3.zst',
+    Streams=[
+        icetray.I3Frame.TrayInfo,
+        icetray.I3Frame.DAQ,
+        icetray.I3Frame.Physics,
+    ],
+    DropOrphanStreams=[icetray.I3Frame.DAQ],
+)
 
-    infiles = [args.gcd, str(infile)]
+tray.Add("TrashCan", "trash")
 
-    tray.Add("I3Reader", "reader", FilenameList=infiles)
+try:
+    tray.Execute()
+    tray.Finish()
+    print("Done:", infile.name)
+except Exception as e:
+    print("Failed:", infile.name)
+    print(e)
+    raise
 
-    tray.AddSegment(
-        event_classifier_onnx_ml,
-        "EventClassifier",
-        ONNX_model_path=str(onnx_model_path),
-        mlsuite_config=ml_config_path,
-        output_key="EventClassifierOutput",
-    )
-
-    tray.Add(
-        "I3Writer",
-        "writer",
-        filename=str(outfile),
-        Streams=[
-            icetray.I3Frame.TrayInfo,
-            icetray.I3Frame.DAQ,
-            icetray.I3Frame.Physics,
-        ],
-        DropOrphanStreams=[icetray.I3Frame.DAQ],
-    )
-
-    tray.Add("TrashCan", "trash")
-
-    try:
-        tray.Execute()
-        tray.Finish()
-        print("Done:", infile.name)
-    except Exception as e:
-        print("Failed:", infile.name)
-        print(e)
-
-
-for f in files:
-    process_file(f)
-
-print("\nFinished:", time.asctime())
+print("Finished:", time.asctime())

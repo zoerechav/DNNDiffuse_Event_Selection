@@ -5,11 +5,11 @@ import glob
 import argparse
 
 #datasets = ['22634', '22614','22633','22645','22646','22613']
-datasets = ['22633','22634']
-
+datasets = ['22614']#,'22614']
+#dataset = '22613'
 subdirs = [
     '0000000-0000999',
-    '0001000-0001999',
+    #'0001000-0001999',
 ]
 
 
@@ -20,7 +20,7 @@ def get_Grid_job(infile, dataset, filenum, outfile, gcd, nugen, muongun, corsika
         job_name = 'PF_MODULE_' + dataset + '_' + filenum
 
         lines = [
-            'JOB ' + job_name + ' /data/user/zrechav/DNNCascades_Diffuse/bdt_selfveto/bdt_scripts/build_PF/npx_v2/v2/PF_MODULE.sub',
+            'JOB ' + job_name + ' /data/user/zrechav/DNNDiffuse_Event_Selection/version-diffuse_v1.0.0_b/PF_MODULE.sub',
             'VARS ' + job_name + ' infile="' + infile + '" outfile="' + outfile + '" filenum="' + str(filenum) + '"',
             'Retry ' + job_name + ' 2',
         ]
@@ -112,7 +112,7 @@ def main():
 
     parser.add_argument(
         '--outfile',
-        default='/home/zrechav/npx/PF_MODULE/DNNDiffuse_L5_PF_split_more.dag',
+        default=f'/home/zrechav/npx/PF_MODULE/DNNDiffuse_L5_PF_split_22614.dag',
         help='Output DAG filename'
     )
 
