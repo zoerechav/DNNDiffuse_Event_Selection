@@ -28,6 +28,11 @@ PARTIAL_QTOT_MIN = 200
 #theo's dnn values
 THEO_SCORE_MIN = 0.1
 
+#cosmic ray cut values
+ZENITH_MIN = 0.8
+ENERGY_MIN = 1e4
+Z_MIN = 100
+
 
 #energy dependent geometry cuts
 #'bottom_slice' --> uncontained events below 10 tev and belove -500 m
@@ -40,4 +45,5 @@ USE_BDT_CUTS = True
 USE_ENERGY_Z_CUT = True
 USE_QTOT_CUTS = True
 USE_THEO_CUTS = True
+USE_COSMIC_RAY_CUTS = True
 

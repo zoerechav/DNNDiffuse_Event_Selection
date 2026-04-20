@@ -85,7 +85,7 @@ if nugen == 1:
             "/data/ana/Diffuse/DNNCascades_Diffuse/version-1.0",
             "DNNCascadeL5/version-diffuse_v1_0_0_a/MuonGun",
             dataset,
-            "DNNCascades_Diffuse_L5_",
+            "DNNCascades_Diffuse_v1_0_0_a_",
         )
 
         output_dir = os.path.join(
