@@ -1,6 +1,7 @@
 from icecube import dataclasses
+import numpy as np
 
-from versions.DNNDiffuse_v1_0_0 import (ENERGY_CONTAINED_Z,CASCADE_BDT_MIN, MUON_BDT_MAX,CONTAINED_QTOT_MIN,PARTIAL_QTOT_MIN,THEO_SCORE_MIN)
+from versions.DNNDiffuse_v1_0_0 import (ENERGY_CONTAINED_Z,CASCADE_BDT_MIN, MUON_BDT_MAX,CONTAINED_QTOT_MIN,PARTIAL_QTOT_MIN,THEO_SCORE_MIN, ZENITH_MIN, ENERGY_MIN, Z_MIN)
 
 
 
@@ -78,4 +79,32 @@ def theo_cut(frame, threshold=THEO_SCORE_MIN):
         val = frame['EventClassifierOutput']['Through_Going_Track']
         if val < threshold:
             flag = True
+    return flag
+
+def cosmic_ray_cut(frame, thresholdzenith = ZENITH_MIN, thresholde =ENERGY_MIN, thresholdz = Z_MIN):
+    flag = False
+
+    if "PreferredFit" in frame:
+
+        if frame['contained'].value == True:
+
+            zenith = np.cos(frame["PreferredFit"].dir.zenith)
+            energy = frame["PreferredFit"].energy
+            z = frame['PreferredFit'].pos.z
+            
+
+            #events to remove
+            cut_condition = (
+                (zenith > thresholdzenith ) and
+                (energy < thresholde) and
+                (z > thresholdz)
+            )
+
+            print(zenith,energy,z,cut_condition)
+            if not cut_condition:
+                flag = True
+
+        else:
+            flag = True
+
     return flag

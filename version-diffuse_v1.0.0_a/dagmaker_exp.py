@@ -109,7 +109,7 @@ if nugen == 1:
 
         output_path = os.path.join(
             output_dir,
-            "DNNCascades_Diffuse_L5_",
+            "DNNCascades_Diffuse_v1_0_0_a_",
         )
 
         dag_lines.extend(

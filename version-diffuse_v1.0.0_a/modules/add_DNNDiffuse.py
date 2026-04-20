@@ -13,6 +13,9 @@ from versions.DNNDiffuse_v1_0_0 import (
     CONTAINED_QTOT_MIN,
     PARTIAL_QTOT_MIN,
     THEO_SCORE_MIN,
+    ZENITH_MIN,
+    ENERGY_MIN,
+    Z_MIN,
 
     # bools
     USE_DUST_CUT,
@@ -20,6 +23,7 @@ from versions.DNNDiffuse_v1_0_0 import (
     USE_ENERGY_Z_CUT,
     USE_QTOT_CUTS,
     USE_THEO_CUTS,
+    USE_COSMIC_RAY_CUTS,
     #energy dependent geometry cut method
     ENERGY_Z_MODE,   # options: "bottom_slice" or "uncontained"
     
@@ -33,6 +37,7 @@ from modules.cut_functions import (
     muon_BDT_cut,
     qtot_cut,
     theo_cut,
+    cosmic_ray_cut,
 )
 
 from utils.pf_features import getDepth, getDetectorTime
@@ -99,6 +104,15 @@ def DNNDiffuseFinalLevel_v1_0_0_nugen(frame):
         
         through_score = frame['EventClassifierOutput']['Through_Going_Track']
         reco_vars["throughgoing_score"] = through_score
+        
+        is_cosmic_ray_bin = (
+            (contained == True) and
+            (zenith > ZENITH_MIN) and
+            (energy < ENERGY_MIN) and
+            (z > Z_MIN)
+        )
+
+        reco_vars["cosmic_ray_bin"] = is_cosmic_ray_bin
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -135,6 +149,11 @@ def DNNDiffuseFinalLevel_v1_0_0_nugen(frame):
         if USE_THEO_CUTS:
             if through_score > THEO_SCORE_MIN:
                 passes = False
+        
+        if USE_COSMIC_RAY_CUTS:
+            if not cosmic_ray_cut(frame):
+                passes = False
+            
             
 
         #pf features
@@ -297,6 +316,15 @@ def DNNDiffuseFinalLevel_v1_0_0_corsika(frame):
         
         through_score = frame['EventClassifierOutput']['Through_Going_Track']
         reco_vars["throughgoing_score"] = through_score
+        
+        is_cosmic_ray_bin = (
+            (contained == True) and
+            (zenith > ZENITH_MIN) and
+            (energy < ENERGY_MIN) and
+            (z > Z_MIN)
+        )
+
+        reco_vars["cosmic_ray_bin"] = is_cosmic_ray_bin
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -332,6 +360,10 @@ def DNNDiffuseFinalLevel_v1_0_0_corsika(frame):
 
         if USE_THEO_CUTS:
             if through_score > THEO_SCORE_MIN:
+                passes = False
+        
+        if USE_COSMIC_RAY_CUTS:
+            if not cosmic_ray_cut(frame):
                 passes = False
 
         #sigma uncertainty features
@@ -466,6 +498,15 @@ def DNNDiffuseFinalLevel_v1_0_0_muongun(frame):
         
         through_score = frame['EventClassifierOutput']['Through_Going_Track']
         reco_vars["throughgoing_score"] = through_score
+        
+        is_cosmic_ray_bin = (
+            (contained == True) and
+            (zenith > ZENITH_MIN) and
+            (energy < ENERGY_MIN) and
+            (z > Z_MIN)
+        )
+
+        reco_vars["cosmic_ray_bin"] = is_cosmic_ray_bin
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -501,6 +542,10 @@ def DNNDiffuseFinalLevel_v1_0_0_muongun(frame):
 
         if USE_THEO_CUTS:
             if through_score > THEO_SCORE_MIN:
+                passes = False
+                
+        if USE_COSMIC_RAY_CUTS:
+            if not cosmic_ray_cut(frame):
                 passes = False
 
         cc = frame["cc"]
@@ -634,6 +679,15 @@ def DNNDiffuseFinalLevel_v1_0_0_exp(frame):
         
         through_score = frame['EventClassifierOutput']['Through_Going_Track']
         reco_vars["throughgoing_score"] = through_score
+        
+        is_cosmic_ray_bin = (
+            (contained == True) and
+            (zenith > ZENITH_MIN) and
+            (energy < ENERGY_MIN) and
+            (z > Z_MIN)
+        )
+
+        reco_vars["cosmic_ray_bin"] = is_cosmic_ray_bin
 
         #cuts
         if energy < MIN_RECO_ENERGY:
@@ -669,6 +723,10 @@ def DNNDiffuseFinalLevel_v1_0_0_exp(frame):
 
         if USE_THEO_CUTS:
             if through_score > THEO_SCORE_MIN:
+                passes = False
+                
+        if USE_COSMIC_RAY_CUTS:
+            if not cosmic_ray_cut(frame):
                 passes = False
 
         

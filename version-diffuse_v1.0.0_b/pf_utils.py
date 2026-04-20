@@ -420,12 +420,6 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 
-def bounded_gompertz(epsilon, a, b, S, C):
-    epsilon = np.asarray(epsilon, dtype=float)
-    A = (1 - C) * S
-    return A * np.exp(-np.exp(a + b * epsilon)) + C
-
-
 def fit_bounded_gompertz_from_dict(
     pf_dict,
     pf_floor=1e-12,
